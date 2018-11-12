@@ -9,7 +9,7 @@
 import React, {Component} from 'react';
 import {Platform, StyleSheet, Text, View} from 'react-native';
 import MapView from 'react-native-maps';
-import { Marker }  from 'react-native-maps';
+import Marker from 'react-native-maps';
 
 
 
@@ -31,9 +31,34 @@ export default class App extends Component<Props> {
         latitudeDelta: 1,
         longitudeDelta: 1,
       }
+    },
+    markers: [
+      {
+      description: 'yes',
+      title: 'marker',
+      coordinates: {
+        latitude: 38.001,
+        longitude: -97.9,
+      }
+    },
+    {
+      description: 'yes',
+      title: 'marker',
+      coordinates: {
+        latitude: 38.0012,
+        longitude: -98.3,
+      }
+    },
+    {
+      description: 'yes',
+      title: 'marker',
+      coordinates: {
+        latitude: 38.1,
+        longitude: -98,
+      }
     }
+    ]
   }
-
 
   componentDidMount() {
     navigator.geolocation.watchPosition(
@@ -47,7 +72,6 @@ export default class App extends Component<Props> {
             }
           }
         });
-        debugger;
         console.log('success:',  pos.coords);
       },
       () => {
@@ -57,18 +81,23 @@ export default class App extends Component<Props> {
   }
 
   render() {
-    debugger;
     console.log("oh fuck yeah bud")
-    console.log('state:', this.state.position)
+    console.log('state:', this.state.position.coordinates)
     return (
       <View style={styles.container}>
         <MapView
         style={styles.map}
-        region={this.state.position.coordinates}
-        initialRegion={this.state}
-
-
-        />  
+        initialRegion={this.state.position.coordinates}
+        >
+         
+          {this.state.markers.map((marker, index) => (
+          <MapView.Marker draggable
+            key={index}
+            coordinate={marker.coordinates}
+            title={marker.title}
+            description={marker.description}
+          />))}
+        </MapView >  
       </View>
 
 

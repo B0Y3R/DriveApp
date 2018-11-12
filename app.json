@@ -1,4 +1,17 @@
 {
   "name": "drive",
-  "displayName": "drive"
+  "displayName": "drive",
+  "expo": {
+   "name": "Your App Name",
+   "icon": "./path/to/your/app-icon.png",
+   "version": "1.0.0",
+   "slug": "your-app-slug",
+   "sdkVersion": "31.0.0",
+   "ios": {
+     "bundleIdentifier": "Native Drive"
+   },
+   "android": {
+     "package": "com.yourcompany.yourappname"
+   }
+  }
 }

@@ -7,9 +7,11 @@
  */
 
 import React, {Component} from 'react';
-import {Platform, StyleSheet, Text, View} from 'react-native';
+import {Platform, StyleSheet, Text, View, PROVIDER_GOOGLE} from 'react-native';
 import MapView from 'react-native-maps';
 import Marker from 'react-native-maps';
+
+console.disableYellowBox = true;
 
 
 
@@ -33,30 +35,6 @@ export default class App extends Component<Props> {
       }
     },
     markers: [
-      {
-      description: 'yes',
-      title: 'marker',
-      coordinates: {
-        latitude: 38.001,
-        longitude: -97.9,
-      }
-    },
-    {
-      description: 'yes',
-      title: 'marker',
-      coordinates: {
-        latitude: 38.0012,
-        longitude: -98.3,
-      }
-    },
-    {
-      description: 'yes',
-      title: 'marker',
-      coordinates: {
-        latitude: 38.1,
-        longitude: -98,
-      }
-    }
     ]
   }
 
@@ -70,7 +48,16 @@ export default class App extends Component<Props> {
               longitudeDelta: 1,
               latitudeDelta: 1,
             }
-          }
+          },
+          markers: [
+            {
+              coordinates: {
+                ...pos.coords,
+                longitudeDelta: 1,
+                latitudeDelta: 1,
+              }
+            }
+          ]
         });
         console.log('success:',  pos.coords);
       },
@@ -80,14 +67,44 @@ export default class App extends Component<Props> {
     )
   }
 
+  //Creates New Marker 
+  addMarker(newMarkerPos) {
+
+    //clone new marker positon as object 
+    const pos = Object.assign({}, newMarkerPos);
+    //extracts latitude from new object created above
+    const lat =  pos.coordinate.latitude;
+    //longitude 
+    const long= pos.coordinate.longitude;
+
+
+    //sets new Variable for coordinates in order to push to markers array
+    const marker = {
+        coordinates: {
+          latitude: lat,
+          longitude: long,
+        }
+      }
+
+    //sets variable array to push new marker coords into 
+    const Markers = this.state.markers;
+    //pushes new markers into markers array
+     Markers.push(marker);
+    
+
+    this.setState({
+      markers: Markers
+    });
+  }
+
   render() {
-    console.log("oh fuck yeah bud")
-    console.log('state:', this.state.position.coordinates)
     return (
       <View style={styles.container}>
         <MapView
+        provider={PROVIDER_GOOGLE}
         style={styles.map}
-        initialRegion={this.state.position.coordinates}
+        region={this.state.position.coordinates}
+        onPress={(e, position) => this.addMarker(e.nativeEvent)}
         >
          
           {this.state.markers.map((marker, index) => (
@@ -97,10 +114,9 @@ export default class App extends Component<Props> {
             title={marker.title}
             description={marker.description}
           />))}
+          
         </MapView >  
       </View>
-
-
     );
   }
 }
@@ -114,15 +130,5 @@ const styles = StyleSheet.create({
   },
   map: {
     ...StyleSheet.absoluteFillObject,
-  },
-  welcome: {
-    fontSize: 20,
-    textAlign: 'center',
-    margin: 10,
-  },
-  instructions: {
-    textAlign: 'center',
-    color: '#333333',
-    marginBottom: 5,
   },
 });

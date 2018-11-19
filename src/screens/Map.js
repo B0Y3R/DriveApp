@@ -83,9 +83,12 @@ state = {
   
 
   render() {
-    const origin = {latitude: 37.3318456, longitude: -122.0296002};
+
+    const origin = this.state.position.coordinates;
+      console.log(origin);
     const destination = {latitude: 37.771707, longitude: -122.4053769};
-    const GOOGLE_MAPS_APIKEY = 'AIzaSyCNyEgxZa8K8c-I9eD-sDYdb7qwlBqvCkM';
+    const GOOGLE_MAPS_APIKEY = 'AIzaSyDxMOfz4tvBwnrf8SiZ0CwWawGWMQNExCg';
+
 
     return (
       <View style={styles.container}>
@@ -101,13 +104,13 @@ state = {
             apikey={GOOGLE_MAPS_APIKEY}
           />
          
-          {/* {this.state.markers.map((marker, index) => (
+          {this.state.markers.map((marker, index) => (
           <MapView.Marker draggable
             key={index}
             coordinate={marker.coordinates}
             title={marker.title}
             description={marker.description}
-          />))} */}
+          />))}
           
         </MapView >
       </View>

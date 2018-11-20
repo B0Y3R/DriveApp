@@ -15,14 +15,14 @@ state = {
         longitudeDelta: 1,
       }
     },
-    markers: [
-    ],
+    markers: [],
     destination: {
       coordinates: {
         latitude: null,
         longitude: null,
       }
-    }
+    },
+    waypoints: [],
   }
 
   componentDidMount() {
@@ -32,18 +32,20 @@ state = {
           position: {
             coordinates: {
               ...pos.coords,
-
             }
           },
           markers: [
             {
               coordinates: {
                 ...pos.coords,
-                longitudeDelta: 1,
-                latitudeDelta: 1,
               }
             }
-          ]
+          ],
+          destination: {
+            coordinates: {
+              ...pos.coords,
+            }
+          }
         });
         console.log('success:',  pos.coords);
       },
@@ -55,7 +57,7 @@ state = {
 
   addDestination(newMarkerPos) {
     this.addMarker(newMarkerPos)
-       //clone new marker positon as object 
+       //clone new positon as object 
        const pos = Object.assign({}, newMarkerPos);
        //extracts latitude from new object created above
        const lat =  pos.coordinate.latitude;
@@ -72,12 +74,15 @@ state = {
        }
 
        const destination = this.state.destination;
+       const waypoints = this.state.waypoints;
+
+       waypoints.push(this.state.destination.coordinates);
 
        this.setState({
          destination: dest,
+         waypoints: waypoints,
        });
   }
-
   
 
   //Creates New Marker 
@@ -120,6 +125,8 @@ state = {
       console.log('destination:', this.state.destination.coordinates);
       console.log('click:' )
     const GOOGLE_MAPS_APIKEY = 'AIzaSyDxMOfz4tvBwnrf8SiZ0CwWawGWMQNExCg';
+    const wayPoints = this.state.waypoints
+      console.log('waypoints:', wayPoints);
 
 
     return (
@@ -134,6 +141,7 @@ state = {
             origin={origin}
             destination={destination}
             apikey={GOOGLE_MAPS_APIKEY}
+            waypoints={wayPoints}
           />
          
           {this.state.markers.map((marker, index) => (

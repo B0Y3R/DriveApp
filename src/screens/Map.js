@@ -16,7 +16,13 @@ state = {
       }
     },
     markers: [
-    ]
+    ],
+    destination: {
+      coordinates: {
+        latitude: null,
+        longitude: null,
+      }
+    }
   }
 
   componentDidMount() {
@@ -26,8 +32,7 @@ state = {
           position: {
             coordinates: {
               ...pos.coords,
-              longitudeDelta: 1,
-              latitudeDelta: 1,
+
             }
           },
           markers: [
@@ -46,6 +51,31 @@ state = {
         console.log('FAIL');
       }
     )
+  }
+
+  addDestination(newMarkerPos) {
+    this.addMarker(newMarkerPos)
+       //clone new marker positon as object 
+       const pos = Object.assign({}, newMarkerPos);
+       //extracts latitude from new object created above
+       const lat =  pos.coordinate.latitude;
+       //longitude 
+       const long = pos.coordinate.longitude;
+
+       const dest = {
+         coordinates: {
+           latitude: lat,
+           longitude: long,
+           latitudeDelta: null,
+           longitudeDelta: null,
+         }
+       }
+
+       const destination = this.state.destination;
+
+       this.setState({
+         destination: dest,
+       });
   }
 
   
@@ -86,7 +116,9 @@ state = {
 
     const origin = this.state.position.coordinates;
       console.log(origin);
-    const destination = {latitude: 37.771707, longitude: -122.4053769};
+    const destination = this.state.destination.coordinates;
+      console.log('destination:', this.state.destination.coordinates);
+      console.log('click:' )
     const GOOGLE_MAPS_APIKEY = 'AIzaSyDxMOfz4tvBwnrf8SiZ0CwWawGWMQNExCg';
 
 
@@ -95,7 +127,7 @@ state = {
         <MapView
         style={styles.map}
         region={this.state.position.coordinates}
-        onPress={(e, position) => this.addMarker(e.nativeEvent)}
+        onPress={(e, position) => this.addDestination(e.nativeEvent)}
         >
 
           <MapViewDirections
